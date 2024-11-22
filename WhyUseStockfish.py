@@ -90,7 +90,7 @@ class ChessAI:
             return 0
         is_white = piece.color == chess.WHITE
         if not is_white:
-            y = 7 - y  # Flip the rank for black pieces
+            y = 7 - y
 
         if piece.piece_type == chess.PAWN:
             value = 10 + (self.pawnEvalWhite[y][x] if is_white else self.pawnEvalBlack[y][x])
