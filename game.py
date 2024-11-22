@@ -21,7 +21,15 @@ class ChessGame:
         pygame.display.set_caption('ChessAI')
 
         self.ai = ChessAI()
-        self.player_color = chess.WHITE  # Player plays as White; AI plays as Black
+        self.player_color = chess.WHITE
+
+        global depth, flag
+        depth = {
+            "easy": 2, 
+            "medium": 3, 
+            "hard": 4,
+        }
+
 
     def draw_pieces(self):
         for square in chess.SQUARES:
@@ -90,12 +98,6 @@ class ChessGame:
     def run(self, mode):
         selected = None
         running = True
-        depth = {
-            "easy": 2, 
-            "medium": 3, 
-            "hard": 4,
-            "explotion": 5
-        }
 
         while running:
             if self.board.turn == self.player_color:
@@ -114,7 +116,6 @@ class ChessGame:
                             promotion_moves = [m for m in self.board.legal_moves if m.from_square == selected and m.to_square == square]
                             if promotion_moves:
                                 if any(m.promotion for m in promotion_moves):
-                                    # Handle promotion
                                     move = chess.Move(selected, square)
                                     self.handle_promotion(move)
                                     print(move)
@@ -127,9 +128,8 @@ class ChessGame:
                             else:
                                 selected = None
             else:
-                # AI's turn
                 pygame.event.pump()
-                ai_move = self.ai.choose_move(self.board, depth[mode])  # easy or medium or hard
+                ai_move = self.ai.choose_move(self.board, depth[mode])
                 if ai_move is not None:
                     self.board.push(ai_move)
                     print(ai_move)
@@ -145,6 +145,5 @@ class ChessGame:
 
 
 if __name__ == "__main__":
-    mode = input("Easy / Medium / Hard\nPlease choose the mode : ")
-    print(f"Let's start {mode} level game!")
+    mode = "medium"  # Select Mode. # easy or medium or hard
     ChessGame().run(mode)
